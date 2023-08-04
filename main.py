@@ -2,7 +2,7 @@ from tkinter import Tk, BOTH, Canvas
 
 
 class Window:
-    def __init__(self, width, height):
+    def __init__(self, width: int, height: int):
         self.width = width
         self.height = height
         self.__root = Tk()
@@ -36,31 +36,67 @@ class Window:
         self.__root.quit()
 
 
-class Point():
-    def __init__(self, x, y):
+class Point:
+    # Takes x and y coordinate to create a point
+    def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
 
-class Line():
-    def __init__(self, point1, point2):
+
+class Line:
+    # takes two Points and destructures their coordinates
+    def __init__(self, point1: Point, point2: Point):
         self.__x1 = point1.x
         self.__y1 = point1.y
         self.__x2 = point2.x
         self.__y2 = point2.y
 
-    def draw(self, canvas, fill_color: str):
+    # draws line using the provided coordinates and canvas
+    def draw(self, canvas: Canvas, fill_color: str):
         canvas.create_line(
             self.__x1, self.__y1, self.__x2, self.__y2, fill=fill_color, width=2
         )
         canvas.pack()
 
 
+class Cell:
+    def __init__(self, top_left: Point, bottom_right: Point, window: Window):
+        self.has_left_wall = True
+        self.has_right_wall = True
+        self.has_top_wall = True
+        self.has_bottom_wall = True
+        self.__x1 = top_left.x
+        self.__y1 = top_left.y
+        self.__x2 = bottom_right.x
+        self.__y2 = bottom_right.y
+        self.__win = window
+
+    def draw(self):
+        top_left = Point(self.__x1, self.__y1)
+        top_right = Point(self.__x2, self.__y1)
+        bottom_right = Point(self.__x2, self.__y2)
+        bottom_left = Point(self.__x1, self.__y2)
+
+        if self.has_left_wall:
+            line = Line(top_left, bottom_left)
+            self.__win.draw_line(line, "black")
+        if self.has_top_wall:
+            line = Line(top_left, top_right)
+            self.__win.draw_line(line, "black")
+        if self.has_right_wall:
+            line = Line(top_right, bottom_right)
+            self.__win.draw_line(line, "black")
+        if self.has_bottom_wall:
+            line = Line(bottom_left, bottom_right)
+            self.__win.draw_line(line, "black")
+
+
 def main():
     win = Window(800, 600)
-    point1 = Point(100,300)
-    point2 = Point(400, 300)
-    line = Line(point1, point2)
-    win.draw_line(line, "blue")
+    point1 = Point(400, 300)
+    point2 = Point(600, 500)
+    cell1 = Cell(point1, point2, win)
+    cell1.draw()
 
     win.wait_for_close()
 
