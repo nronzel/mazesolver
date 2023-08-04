@@ -28,13 +28,41 @@ class Window:
         while self.window_running is True:
             self.redraw()
 
+    def draw_line(self, line, fill_color):
+        line.draw(self.canvas, fill_color)
+
     def close(self):
         self.window_running = False
         self.__root.quit()
 
 
+class Point():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class Line():
+    def __init__(self, point1, point2):
+        self.__x1 = point1.x
+        self.__y1 = point1.y
+        self.__x2 = point2.x
+        self.__y2 = point2.y
+
+    def draw(self, canvas, fill_color: str):
+        canvas.create_line(
+            self.__x1, self.__y1, self.__x2, self.__y2, fill=fill_color, width=2
+        )
+        canvas.pack()
+
+
 def main():
     win = Window(800, 600)
+    point1 = Point(100,300)
+    point2 = Point(400, 300)
+    line = Line(point1, point2)
+    win.draw_line(line, "blue")
+
     win.wait_for_close()
+
 
 main()
