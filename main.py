@@ -11,7 +11,7 @@ class Window:
         self.canvas = Canvas(
             self.__root, {"bg": "white", "height": height, "width": width}
         )
-        self.canvas.pack()
+        self.canvas.pack(fill=BOTH)
         self.window_running = False
 
     def redraw(self):
@@ -90,13 +90,33 @@ class Cell:
             line = Line(bottom_left, bottom_right)
             self.__win.draw_line(line, "black")
 
+    def draw_move(self, to_cell, undo=False):
+        color = "red"
+        if undo:
+            color = "gray"
+        # draw a line from the center of one cell to the center of the to_cell
+        curr_center_point = Point(
+            (self.__x1 + self.__x2 // 2), (self.__y1 + self.__y2 // 2)
+        )
+
+        to_center_point = Point(
+            (to_cell.__x1 + to_cell.__x2) // 2, (to_cell.__y1 + to_cell.__y2) // 2
+        )
+        line = Line(curr_center_point, to_center_point)
+        self.__win.draw_line(line, color)
+
 
 def main():
     win = Window(800, 600)
-    point1 = Point(400, 300)
-    point2 = Point(600, 500)
+    point1 = Point(0, 0)
+    point2 = Point(200, 200)
+    point3 = Point(200, 0)
+    point4 = Point(400, 200)
     cell1 = Cell(point1, point2, win)
+    cell2 = Cell(point3, point4, win)
     cell1.draw()
+    cell2.draw()
+    cell1.draw_move(cell2)
 
     win.wait_for_close()
 
