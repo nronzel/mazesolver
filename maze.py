@@ -22,6 +22,7 @@ class Maze:
         self._cells = []
 
         self._create_cells()
+        self._break_entrance_and_exit()
 
     def _create_cells(self):
         for i in range(self._num_cols):
