@@ -22,33 +22,17 @@ class Cell:
         self._x2 = x2
         self._y2 = y2
 
-        if self.has_left_wall:
-            line = Line(Point(x1, y1), Point(x1, y2))
-            self._win.draw_line(line)
-        else:
-            line = Line(Point(x1, y1), Point(x1, y2))
-            self._win.draw_line(line, "white")
+        walls = [
+            (self.has_left_wall, Point(x1, y1), Point(x1, y2)),
+            (self.has_top_wall, Point(x1, y1), Point(x2, y1)),
+            (self.has_right_wall, Point(x2, y1), Point(x2, y2)),
+            (self.has_bottom_wall, Point(x1, y2), Point(x2, y2)),
+        ]
 
-        if self.has_top_wall:
-            line = Line(Point(x1, y1), Point(x2, y1))
-            self._win.draw_line(line)
-        else:
-            line = Line(Point(x1, y1), Point(x2, y1))
-            self._win.draw_line(line, "white")
-
-        if self.has_right_wall:
-            line = Line(Point(x2, y1), Point(x2, y2))
-            self._win.draw_line(line)
-        else:
-            line = Line(Point(x2, y1), Point(x2, y2))
-            self._win.draw_line(line, "white")
-
-        if self.has_bottom_wall:
-            line = Line(Point(x1, y2), Point(x2, y2))
-            self._win.draw_line(line)
-        else:
-            line = Line(Point(x1, y2), Point(x2, y2))
-            self._win.draw_line(line, "white")
+        for has_wall, start, end in walls:
+            color = None if has_wall else "white"
+            line = Line(start, end)
+            self._win.draw_line(line, color)
 
     def draw_move(self, to_cell, undo=False):
         if self._win is None:
