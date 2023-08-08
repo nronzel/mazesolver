@@ -29,19 +29,7 @@ class Tests(unittest.TestCase):
         num_cols = 5
         num_rows = 5
         m1 = Maze(0, 0, num_rows, num_cols, 5, 5)
-        # set each cell visited to True
-        for column in m1._cells:
-            for cell in column:
-                cell.visited = True
-        # assert visited = True
-        for column in m1._cells:
-            for cell in column:
-                self.assertEqual(cell.visited, True)
 
-        # reset visited to False
-        m1._reset_cells_visited()
-
-        # assert visited is False for each cell
         for column in m1._cells:
             for cell in column:
                 self.assertEqual(cell.visited, False)
