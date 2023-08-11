@@ -7,6 +7,8 @@ algorithm.
 
 Written in Python and uses Tkinter for the GUI.
 
+Python version 3.10.7
+
 ## Usage
 
 Clone this repository to a local directory
