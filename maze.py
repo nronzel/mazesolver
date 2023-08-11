@@ -70,7 +70,7 @@ class Maze:
         if self._win is None:
             return
         self._win.redraw()
-        time.sleep(0.05)
+        time.sleep(0.02)
 
     def _break_entrance_and_exit(self):
         """
@@ -147,3 +147,45 @@ class Maze:
         for column in self._cells:
             for cell in column:
                 cell.visited = False
+
+    def solve(self):
+        self._solve_r(0, 0)
+
+    def _solve_r(self, i: int, j: int) -> bool:
+        # return True if current cell is end cell OR if it leads to the end cell
+        # else False
+
+        # call the animate def
+        self._animate()
+
+        # mark current cell as visited
+        self._cells[i][j].visited = True
+
+        # if at the end cell, return True
+        if i == self._num_cols - 1 and j == self._num_rows - 1:
+            self._animate()
+            return True
+
+        # possible directions
+        # up, right, down, left
+        directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+        for direction in directions:
+            ni, nj = i + direction[0], j + direction[1]
+            if 0 <= ni < self._num_cols and 0 <= nj < self._num_rows:
+                if (
+                    (direction == (0, -1) and not self._cells[i][j].has_top_wall)
+                    or (direction == (1, 0) and not self._cells[i][j].has_right_wall)
+                    or (direction == (0, 1) and not self._cells[i][j].has_bottom_wall)
+                    or (direction == (-1, 0) and not self._cells[i][j].has_left_wall)
+                ) and not self._cells[ni][nj].visited:
+                    # draw a move between the current and next cell
+                    self._cells[i][j].draw_move(self._cells[ni][nj])
+
+                    # recursive case
+                    if self._solve_r(ni, nj):
+                        return True
+
+                    # otherwise, "undo" the move
+                    self._cells[i][j].draw_move(self._cells[ni][nj], undo=True)
+        # no direction worked out - loser cell
+        return False
