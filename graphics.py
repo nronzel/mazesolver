@@ -41,7 +41,6 @@ class Point:
 
 
 class Line:
-    # takes two Points and destructures their coordinates
     def __init__(self, point1: Point, point2: Point):
         self.p1 = point1
         self.p2 = point2
